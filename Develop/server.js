@@ -1,29 +1,33 @@
-
 //import modules
 const express = require('express');
 const fs = require('fs');
-const { type } = require('os');
 
 // assign express object to expressServer;
-const expressServer = express();
-const PORT = 8080;
+const app = express(); //app being convention for Express() 
+const PORT = 8000;
+
+// Sets up the Express app to handle data parsing
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 
 //create get listeners
 
-expressServer.get('/notes',(req,res) => 
+app.get('/notes',(req,res) => 
 {
     fs.readFile('./public/notes.html',(err,notes) => 
     {
         if (err) return err;
         res.writeHead(200, { 'Content-Type': 'text/html' });
+        console.log(notes)
         res.end(notes);
     });
 });
 
 
-expressServer.get('/api/notes',(req,res) => 
+app.get('/api/notes',(req,res) => 
 {
-    fs.readFile('./db/db.json',{'content-type':'application/json'},(err,data) => 
+    fs.readFile('./db/db.json',{'Content-Type':'application/json'},(err,data) => 
     {
         if (err) return err;
         res.writeHead(200, {'Content-Type': 'application/json'});
@@ -32,7 +36,7 @@ expressServer.get('/api/notes',(req,res) =>
 
 });
 
-expressServer.get('*',(req,res) => 
+app.get('*',(req,res) => 
 {
     fs.readFile('./public/index.html',{'content-type':'text/html'},(err,home) => 
     {
@@ -42,9 +46,14 @@ expressServer.get('*',(req,res) =>
     });
 });
 
+app.post('/api/notes',(req,res) => {
 
-//GET /api/notes should read the db.json file and return all saved notes as JSON.
-expressServer.listen(PORT,() => {console.log("listening on Port: ", PORT)});
+    const userNote = req.body;
+    res.json(userNote);
+
+});
+
+app.listen(PORT,() => {console.log("listening on Port: ", PORT)});
 
 
 
