@@ -10,6 +10,8 @@ const PORT = 8000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(express.static('./public'));
+
 
 //create get listeners
 
@@ -19,7 +21,16 @@ app.get('/notes',(req,res) =>
     {
         if (err) return err;
         res.writeHead(200, { 'Content-Type': 'text/html' });
-        console.log(notes)
+        res.end(notes);
+    });
+});
+
+app.get('/js/index.js',(req,res) => 
+{
+    fs.readFile('./public/js/index.js',(err,notes) => 
+    {
+        if (err) return err;
+        res.writeHead(200, { 'Content-Type': 'text/javascript' });
         res.end(notes);
     });
 });
@@ -46,13 +57,20 @@ app.get('*',(req,res) =>
     });
 });
 
-app.post('/api/notes',(req,res) => {
-
+app.post('/api/notes',(req,res) => 
+{
     const userNote = req.body;
-    res.json(userNote);
+
+    fs.appendFile('./db/db.json',(err,data) => 
+    {
+        if (err) return err;
+        return app.json(userNote);
+    });
 
 });
 
+
+        
 app.listen(PORT,() => {console.log("listening on Port: ", PORT)});
 
 
