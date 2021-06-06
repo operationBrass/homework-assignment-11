@@ -20,22 +20,25 @@ const __notes = "/notes"
 
 app.post('/api/notes',(req,res) => 
 {
-    const userNote = req.body;
+    userNote = JSON.stringify(req.body);
 
-    fs.appendFile('./db/db.json',(err,data) => 
+    fs.appendFile('./db/db.json',userNote,(err,data) => 
     {
         if (err) return err;
-        return app.json(userNote);
-    });
+        return userNote;
+    }); 
 
 });
 
 
 app.get('*',(req,res) => 
 {
+
+    // check what the url is and return the file that is associated with it. 
+
     let contentType = {};
     let filePath = '';
-    console.log(req.url);
+
     switch (req.url)
     {
         case __js:
@@ -50,7 +53,7 @@ app.get('*',(req,res) =>
             filePath = "./public/notes.html";
             contentType = {'content-type':'text/html'};
             break;
-        default:
+        default: //index.html
             filePath = "./public/index.html";
             contentType = {'content-type':'text/html'};
     }
