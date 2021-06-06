@@ -1,4 +1,5 @@
 //import modules
+const { Console } = require('console');
 const express = require('express');
 const fs = require('fs');
 
@@ -10,61 +11,12 @@ const PORT = 8000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static('./public'));
-
+// add file directory paths for the get requests 
+const __js = "/assets/js/index.js"
+const __css = "/assets/css/styles.css"
+const __notes = "/notes"
 
 //create get listeners
-
-app.get('/notes',(req,res) => 
-{
-    fs.readFile('./public/notes.html',(err,notes) => 
-    {
-        if (err) return err;
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(notes);
-    });
-});
-
-app.get('/js/index.js',(req,res) => 
-{
-    fs.readFile('./public/js/index.js',(err,notes) => 
-    {
-        if (err) return err;
-        res.writeHead(200, { 'Content-Type': 'text/javascript' });
-        res.end(notes);
-    });
-});
-
-app.get('/css/styles.css',(req,res) => 
-{
-    fs.readFile('./public/css/styles.css',(err,notes) => 
-    {
-        if (err) return err;
-        res.writeHead(200, { 'Content-Type': 'text/css'});
-        res.end(notes);
-    });
-});
-
-app.get('/api/notes',(req,res) => 
-{
-    fs.readFile('./db/db.json',{'Content-Type':'application/json'},(err,data) => 
-    {
-        if (err) return err;
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(data);
-    });
-
-});
-
-app.get('*',(req,res) => 
-{
-    fs.readFile('./public/index.html',{'content-type':'text/html'},(err,home) => 
-    {
-        if (err) return err;
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(home);
-    });
-});
 
 app.post('/api/notes',(req,res) => 
 {
@@ -79,7 +31,39 @@ app.post('/api/notes',(req,res) =>
 });
 
 
-        
+app.get('*',(req,res) => 
+{
+    let contentType = {};
+    let filePath = '';
+    console.log(req.url);
+    switch (req.url)
+    {
+        case __js:
+            filePath = "./public/assets/js/index.js";
+            contentType = {'content-type':'text/javascript'};
+            break;
+        case __css:
+            filePath = "./public/assets/css/styles.css";
+           contentType = {'content-type':'text/css'};
+           break;
+        case __notes:
+            filePath = "./public/notes.html";
+            contentType = {'content-type':'text/html'};
+            break;
+        default:
+            filePath = "./public/index.html";
+            contentType = {'content-type':'text/html'};
+    }
+
+    fs.readFile(filePath,contentType,(err,data) => {
+
+        if (err) return err;
+        res.writeHead(200);  
+        res.end(data);
+    });
+  
+});
+
 app.listen(PORT,() => {console.log("listening on Port: ", PORT)});
 
 
