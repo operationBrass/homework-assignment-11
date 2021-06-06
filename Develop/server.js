@@ -35,6 +35,15 @@ app.get('/js/index.js',(req,res) =>
     });
 });
 
+app.get('/css/styles.css',(req,res) => 
+{
+    fs.readFile('./public/css/styles.css',(err,notes) => 
+    {
+        if (err) return err;
+        res.writeHead(200, { 'Content-Type': 'text/css'});
+        res.end(notes);
+    });
+});
 
 app.get('/api/notes',(req,res) => 
 {
