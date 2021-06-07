@@ -12,24 +12,40 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // add file directory paths for the get requests 
-const __js = "/assets/js/index.js"
-const __css = "/assets/css/styles.css"
-const __notes = "/notes"
+const __js = "/assets/js/index.js";
+const __css = "/assets/css/styles.css";
+const __notes = "/notes";
+const __apiNotes = "/api/notes";
 
 //create get listeners
 
 app.post('/api/notes',(req,res) => 
 {
-    userNote = JSON.stringify(req.body);
+    const userNote = req.body;
 
-    fs.appendFile('./db/db.json',userNote,(err,data) => 
+    fs.readFile('./db/db.json', (err, data) =>
     {
         if (err) return err;
-        return userNote;
-    }); 
+        let notes = JSON.parse(data);
+        notes.push(userNote);
+        fs.writeFile('./db/db.json', JSON.stringify(notes),() => {
+            console.log("file updated");
+        });
+    });
 
 });
 
+app.get('/api/notes',(req,res) => 
+{
+
+    fs.readFile('./db/db.json',{'content-type':'application/json'},(err,data) => {
+
+        if (err) return err;
+        res.writeHead(200);  
+        res.end(data);
+    });
+
+});
 
 app.get('*',(req,res) => 
 {
