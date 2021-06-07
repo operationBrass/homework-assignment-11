@@ -28,7 +28,7 @@ app.post('/api/notes',(req,res) =>
         if (err) return err;
         let notes = JSON.parse(data);
         notes.push(userNote);
-        fs.writeFile('./db/db.json', JSON.stringify(notes),() => {
+        fs.writeFile('./db/db.json', JSON.stringify(notes,null,2),() => {
             console.log("file updated");
         });
     });
