@@ -1,7 +1,10 @@
 //import modules
-const { Console } = require('console');
 const express = require('express');
 const fs = require('fs');
+
+// vue NPM package for generating UUIDs
+const { v4: uuidv4 } = require('uuid');
+
 
 // assign express object to expressServer;
 const app = express(); //app being convention for Express() 
@@ -22,6 +25,9 @@ const __apiNotes = "/api/notes";
 app.post(__apiNotes,(req,res) => 
 {
     const userNote = req.body;
+    const newID = uuidv4();
+    userNote.id = newID;
+    console.log(userNote);
 
     fs.readFile('./db/db.json', (err, data) =>
     {
@@ -32,14 +38,12 @@ app.post(__apiNotes,(req,res) =>
             console.log("file updated");
         });
     });
-
 });
 
 app.get(__apiNotes,(req,res) => 
 {
 
     fs.readFile('./db/db.json',{'content-type':'application/json'},(err,data) => {
-
         if (err) return err;
         res.writeHead(200);  
         res.end(data);
@@ -49,12 +53,9 @@ app.get(__apiNotes,(req,res) =>
 
 app.get('*',(req,res) => 
 {
-
     // check what the url is and return the file that is associated with it. 
-   
     let contentType = {};
     let filePath = '';
-
     switch (req.url)
     {
         case __js:
@@ -73,14 +74,13 @@ app.get('*',(req,res) =>
             filePath = "./public/index.html";
             contentType = {'content-type':'text/html'};
     }
-
     fs.readFile(filePath,contentType,(err,data) => {
 
         if (err) return err;
         res.writeHead(200);  
         res.end(data);
+
     });
-  
 });
 
 app.listen(PORT,() => {console.log("listening on Port: ", PORT)});
