@@ -19,7 +19,7 @@ const __apiNotes = "/api/notes";
 
 //create get listeners
 
-app.post('/api/notes',(req,res) => 
+app.post(__apiNotes,(req,res) => 
 {
     const userNote = req.body;
 
@@ -35,7 +35,7 @@ app.post('/api/notes',(req,res) =>
 
 });
 
-app.get('/api/notes',(req,res) => 
+app.get(__apiNotes,(req,res) => 
 {
 
     fs.readFile('./db/db.json',{'content-type':'application/json'},(err,data) => {
@@ -51,7 +51,7 @@ app.get('*',(req,res) =>
 {
 
     // check what the url is and return the file that is associated with it. 
-
+   
     let contentType = {};
     let filePath = '';
 
