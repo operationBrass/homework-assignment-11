@@ -19,15 +19,15 @@ const __js = "/assets/js/index.js";
 const __css = "/assets/css/styles.css";
 const __notes = "/notes";
 const __apiNotes = "/api/notes";
+const __delPath = `/api/notes/:id`
 
-//create get listeners
+//create post and get listeners
 
 app.post(__apiNotes,(req,res) => 
 {
     const userNote = req.body;
     const newID = uuidv4();
-    userNote.id = newID;
-    console.log(userNote);
+    userNote.id = newID; //add new key-value pair id to usernotes
 
     fs.readFile('./db/db.json', (err, data) =>
     {
@@ -35,7 +35,7 @@ app.post(__apiNotes,(req,res) =>
         let notes = JSON.parse(data);
         notes.push(userNote);
         fs.writeFile('./db/db.json', JSON.stringify(notes,null,2),() => {
-            console.log("file updated");
+            
         });
     });
 });
@@ -81,6 +81,21 @@ app.get('*',(req,res) =>
         res.end(data);
 
     });
+});
+
+app.delete(__delPath,(req,res) => {
+
+    console.log(req.params.id);
+
+    fs.readFile('./db/db.json', (err, data) =>
+    {
+        if (err) return err;
+        let notes = JSON.parse(data);
+        let modifiedNotes = notes.filter(data => data.id != req.params.id);
+        fs.writeFile('./db/db.json', JSON.stringify(modifiedNotes,null,2),() => {
+        });
+    });
+
 });
 
 app.listen(PORT,() => {console.log("listening on Port: ", PORT)});
