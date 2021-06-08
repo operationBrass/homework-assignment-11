@@ -29,7 +29,7 @@ app.post(__apiNotes,(req,res) =>
     const newID = uuidv4();
     userNote.id = newID; //add new key-value pair id to usernotes
 
-    fs.readFile('./db/db.json', (err, data) =>
+    fs.readFile('./develop/db/db.json', (err, data) =>
     {
         if (err) return err;
         let notes = JSON.parse(data);
