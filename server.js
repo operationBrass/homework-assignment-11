@@ -40,7 +40,7 @@ app.post(__apiNotes,(req,res) =>
         let notes = JSON.parse(data);
         notes.push(userNote);
         fs.writeFile(path.join(__dirname,'/Develop/db/db.json'), JSON.stringify(notes,null,2),() => {
-            
+        res.redirect("/notes");
         });
     });
 });
@@ -99,9 +99,10 @@ app.delete(__delPath,(req,res) => {
         let notes = JSON.parse(data);
         let modifiedNotes = notes.filter(data => data.id != req.params.id); //new array is created with all objects excluding the one to del.
         fs.writeFile(path.join(__dirname,'/Develop/db/db.json'), JSON.stringify(modifiedNotes,null,2),() => {
+        res.redirect("/notes");
+        res.status(200);
         });
     });
-
 });
 
 app.listen(PORT,() => {console.log("listening on Port: ", PORT)});
