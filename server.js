@@ -9,7 +9,7 @@ const { v4: uuidv4 } = require('uuid');
 
 // assign express object to expressServer;
 const app = express(); //app being convention for Express() 
-const PORT = process.env.port || 8000;
+const PORT = process.env.PORT || 8000;
 
 express.static(path.join(__dirname, '/Develop/public'));
 express.static(path.join(__dirname, '/Develop/db'));
