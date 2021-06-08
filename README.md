@@ -5,7 +5,7 @@
 
 
 
-  ![Note Taker](./Develop/Assets/finalScreen.PNG)
+  ![Note Taker](./assets/finalScreen.PNG)
 
 
           
