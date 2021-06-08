@@ -6,7 +6,6 @@ const path = require('path');
 // vue NPM package for generating UUIDs
 const { v4: uuidv4 } = require('uuid');
 
-
 // assign express object to expressServer;
 const app = express(); //app being convention for Express() 
 const PORT = process.env.PORT || 8000;
@@ -55,6 +54,8 @@ app.get(__apiNotes,(req,res) =>
     });
 
 });
+
+
 
 app.get('*',(req,res) => 
 {
