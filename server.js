@@ -62,7 +62,6 @@ app.get('*',(req,res) =>
     // check what the url is and return the file that is associated with it. 
     let contentType = {};
     let filePath = '';
-    console.log(req.url);
     switch (req.url)
     {
         case __js:
@@ -91,8 +90,6 @@ app.get('*',(req,res) =>
 });
 
 app.delete(__delPath,(req,res) => {
-
-    console.log(req.params.id);
 
     fs.readFile(path.join(__dirname,'/Develop/db/db.json'), (err, data) =>
     {
